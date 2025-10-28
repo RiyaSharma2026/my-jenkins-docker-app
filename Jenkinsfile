@@ -1,42 +1,20 @@
 pipeline {
     agent any
-
     stages {
-        stage('Clone Repository') {
-            steps {
-                git branch: 'main', url: 'https://github.com/RiyaSharma2026/my-jenkins-docker-app.git'
-            }
-        }
-
         stage('Build App') {
             steps {
-                sh 'npm install || echo "No package.json found"'
+                bat 'mvn clean package'       
             }
         }
-
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t my-jenkins-docker-app .'
+                bat 'docker build -t myapp .' 
             }
         }
-
         stage('Run Docker Container') {
             steps {
-                sh '''
-                    docker stop my-jenkins-docker-app || true
-                    docker rm my-jenkins-docker-app || true
-                    docker run -d -p 8080:8080 --name my-jenkins-docker-app my-jenkins-docker-app
-                '''
+                bat 'docker run -d -p 8080:8080 myapp'
             }
-        }
-    }
-
-    post {
-        success {
-            echo '✅ Build and Docker run completed successfully!'
-        }
-        failure {
-            echo '❌ Build failed. Check the logs above.'
         }
     }
 }
