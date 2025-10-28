@@ -24,11 +24,13 @@ pipeline {
         }
 
         stage('Stop Previous Container') {
-            steps {
-                docker rm -f my-jenkins-app || echo "No existing container"
+    steps {
+        bat '''
+        docker rm -f my-jenkins-app || echo No existing container
+        '''
+    }
+}
 
-            }
-        }
 
         stage('Run Docker Container') {
             steps {
