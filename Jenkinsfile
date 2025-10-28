@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         APP_NAME = 'my-jenkins-app'
-        APP_PORT = '8080'
+        APP_PORT = '8081'
         GIT_URL = 'https://github.com/RiyaSharma2026/my-jenkins-docker-app.git'
         GIT_BRANCH = 'main'
     }
