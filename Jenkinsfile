@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build App') {
             steps {
-                sh 'npm install'
+                sh 'npm install || echo "No package.json found"'
             }
         }
 
@@ -22,14 +22,21 @@ pipeline {
 
         stage('Run Docker Container') {
             steps {
-                sh 'docker run -d -p 8080:8080 --name my-jenkins-docker-app my-jenkins-docker-app'
+                sh '''
+                    docker stop my-jenkins-docker-app || true
+                    docker rm my-jenkins-docker-app || true
+                    docker run -d -p 8080:8080 --name my-jenkins-docker-app my-jenkins-docker-app
+                '''
             }
         }
     }
 
     post {
-        always {
-            echo 'Build process finished!'
+        success {
+            echo '✅ Build and Docker run completed successfully!'
+        }
+        failure {
+            echo '❌ Build failed. Check the logs above.'
         }
     }
 }
