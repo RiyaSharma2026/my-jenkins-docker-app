@@ -16,13 +16,14 @@ pipeline {
             }
         }
 
-        stage('Build App with Maven Docker') {
-            steps {
-                // Run Maven inside a Docker container
-                bat """
-                docker run --rm -v %CD%:/app -w /app maven:3.9.5-eclipse-temurin-17 mvn clean package
-                """
-            }
+        stage('Build App') {
+    steps {
+        bat """
+        docker run --rm -v "%CD%\\e-app:/app" -w /app maven:3.9.5-eclipse-temurin-17 mvn clean package
+        """
+    }
+}
+
         }
 
         stage('Build Docker Image') {
