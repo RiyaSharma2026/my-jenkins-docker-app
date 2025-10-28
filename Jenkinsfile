@@ -25,12 +25,8 @@ pipeline {
 
         stage('Stop Previous Container') {
             steps {
-                bat """
-                docker ps -q -f "name=${APP_NAME}" > temp.txt
-                for /F %%i in (temp.txt) do docker stop %%i
-                for /F %%i in (temp.txt) do docker rm %%i
-                del temp.txt
-                """
+                docker rm -f my-jenkins-app || echo "No existing container"
+
             }
         }
 
